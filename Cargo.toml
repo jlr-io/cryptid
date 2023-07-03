@@ -1,0 +1,29 @@
+[package]
+name = "cryptid"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = { version = "4.2.2", features = ["derive"] }
+
+# hashing
+hex = "0.4.3"
+digest = "0.10.3"
+
+md-5 = "0.10.1"
+sha-1 = "0.10.0"
+sha2 = "0.10.2"
+sha3 = "0.10.1"
+ripemd = "0.1.1"
+blake2 = "0.10.4"
+blake3 = "0.1.2"
+shabal = "0.4.1"
+sm3 = "0.4.1"
+streebog = "0.10.1"
+tiger = "0.2.1"
+whirlpool = "0.10.1"
+groestl = "0.10.1"
+gost94 = "0.10.1"
+fsb = "0.1.1"
