@@ -1,5 +1,6 @@
+use anyhow::Result;
 use blake2::{Blake2b512, Blake2s256};
-use digest::{Digest};
+use digest::Digest;
 use hex::encode_upper;
 use fsb::{Fsb160, Fsb224, Fsb256, Fsb384, Fsb512};
 use gost94::Gost94CryptoPro;
@@ -15,19 +16,6 @@ use streebog::*;
 use tiger::Tiger;
 use whirlpool::Whirlpool;
 
-#[derive(Debug)]
-pub enum HashError {
-    InvalidHashAlgorithm(String),
-}
-
-impl std::fmt::Display for HashError {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        match self {
-            HashError::InvalidHashAlgorithm(algo) => write!(f, "Invalid hash algorithm: {}", algo),
-        }
-    }
-}
-
 pub struct Hasher
 {
     digest: Box<dyn digest::DynDigest>,
@@ -35,7 +23,7 @@ pub struct Hasher
 
 impl Hasher
 {
-    pub fn new(algo: &str) -> Result<Hasher, HashError> {
+    pub fn new(algo: &str) -> Result<Hasher> {
         let digest = Hasher::get_digest(algo)?;
         Ok(Hasher { digest })
     }
@@ -45,7 +33,7 @@ impl Hasher
         return encode_upper(self.digest.finalize());
     }
 
-    fn get_digest(algo: &str) -> Result<Box<dyn digest::DynDigest>, HashError> {
+    fn get_digest(algo: &str) -> Result<Box<dyn digest::DynDigest>> {
         return Ok(match algo.to_lowercase().as_str() {
             "md5" => Box::new(Md5::default()),
             "sha1" => Box::new(Sha1::default()),
@@ -78,7 +66,22 @@ impl Hasher
             "fsb256" => Box::new(Fsb256::default()),
             "fsb384" => Box::new(Fsb384::default()),
             "fsb512" => Box::new(Fsb512::default()),
-            _ => return Err(HashError::InvalidHashAlgorithm(algo.to_string())),
+            _ => return Err(HasherError::InvalidHashAlgorithm(algo.to_string()).into()),
         });
+    }
+}
+
+#[derive(Debug)]
+pub enum HasherError {
+    InvalidHashAlgorithm(String),
+}
+
+impl std::error::Error for HasherError {}
+
+impl std::fmt::Display for HasherError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            HasherError::InvalidHashAlgorithm(algo) => write!(f, "Invalid hash algorithm: {}", algo),
+        }
     }
 }

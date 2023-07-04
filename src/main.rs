@@ -1,8 +1,6 @@
-use cryptid::{
-    cli::{Cli},
-    command,
-};
+use anyhow::Result;
+use cryptid::cli::Cli;
 
-fn main() -> Result<(), command::CommandError>{
+fn main() -> Result<()> {
     Cli::run()
 }
