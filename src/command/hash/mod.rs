@@ -17,7 +17,7 @@ impl Command for HashCommand {
         let file = file::File::new(&self.path);
         let hash = file.hash(&self.algorithm)?;
         println!("{}", self.path.display());
-        println!("{}", hash);
+        println!("{}", hash.to_lowercase());
         Ok(())
     }
 }

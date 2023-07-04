@@ -1,3 +1,5 @@
+use colored::*;
+
 pub mod file;
 pub mod hasher;
 pub mod cli;
